@@ -1,0 +1,19 @@
+# Documentos del laboratorio
+*.docx
+~$*
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*~
+
+# Logs
+*.log
