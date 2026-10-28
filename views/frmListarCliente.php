@@ -32,8 +32,23 @@ setTimeout(function () {
 
     <section class="card">
     <?php
-    $sql = listaClientes();
-    if (mysqli_num_rows($sql) === 0) {
+    $error = null;
+    $sql = null;
+    try {
+        $sql = listaClientes();
+    } catch (RuntimeException $e) {
+        $error = $e->getMessage();
+    }
+
+    if ($error !== null) {
+    ?>
+        <div class="empty">
+            <h2>No se pudo consultar la base de datos</h2>
+            <p><?= htmlspecialchars($error, ENT_QUOTES, "UTF-8") ?></p>
+            <a class="btn btn-ghost" href="frmListarCliente.php">Reintentar</a>
+        </div>
+    <?php
+    } elseif (mysqli_num_rows($sql) === 0) {
     ?>
         <div class="empty">
             <h2>No hay clientes registrados</h2>

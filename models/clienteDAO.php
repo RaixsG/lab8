@@ -13,14 +13,22 @@ function insertar($dni,$ape,$nom,$ema,$cel,$dir){
 
 function getClientes(){
     global $cn;
-    $sql="SELECT * FROM tcliente";
-    return mysqli_query($cn,$sql);
+    $sql="SELECT * FROM tcliente ORDER BY id";
+    $res=mysqli_query($cn,$sql);
+    if(!$res){
+        throw new RuntimeException("Error al listar clientes: ".mysqli_error($cn));
+    }
+    return $res;
 }
 
 function consultarCliente($idC){
     global $cn;
     $sql="SELECT * FROM tcliente WHERE id='".$idC."'";
-    return mysqli_query($cn,$sql);
+    $res=mysqli_query($cn,$sql);
+    if(!$res){
+        throw new RuntimeException("Error al consultar el cliente: ".mysqli_error($cn));
+    }
+    return $res;
 }
 
 function modificar($id,$dni,$ape,$nom,$ema,$cel,$dir){

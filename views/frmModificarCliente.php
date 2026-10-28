@@ -2,9 +2,16 @@
 include("../controllers/clienteController.php");
 
 $row = null;
+$error = null;
 if (isset($_GET['idc'])) {
-    $datos = consultarCli($_GET['idc']);
-    $row = mysqli_fetch_array($datos);
+    try {
+        $datos = consultarCli($_GET['idc']);
+        if (mysqli_num_rows($datos) > 0) {
+            $row = mysqli_fetch_array($datos);
+        }
+    } catch (RuntimeException $e) {
+        $error = $e->getMessage();
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -27,7 +34,13 @@ if (isset($_GET['idc'])) {
     </header>
 
     <section class="card">
-    <?php if ($row) { ?>
+    <?php if ($error !== null) { ?>
+        <div class="empty">
+            <h2>No se pudo consultar la base de datos</h2>
+            <p><?= htmlspecialchars($error, ENT_QUOTES, "UTF-8") ?></p>
+            <a class="btn btn-ghost" href="frmListarCliente.php">Volver al listado</a>
+        </div>
+    <?php } elseif ($row) { ?>
         <div class="card-body">
             <form method="post" action="../controllers/clienteController.php">
                 <div class="form-grid">
