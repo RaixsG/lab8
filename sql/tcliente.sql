@@ -5,7 +5,6 @@
 --   mysql -u root -p < sql/tcliente.sql
 --   o pegar todo el contenido en phpMyAdmin / DBeaver / HeidiSQL.
 --
--- Compatible con MySQL 8.x y MariaDB.
 
 SET NAMES utf8mb4;
 
