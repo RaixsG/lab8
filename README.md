@@ -22,7 +22,8 @@ Aplicación web con arquitectura por capas (vista, controlador, modelo) para el
 │   ├── frmRegistrarCliente.php
 │   └── frmModificarCliente.php
 ├── sql/
-│   └── tcliente.sql                 # crea bdalumno + tabla tcliente
+│   └── tcliente.sql                 # crea bdalumno + tabla tcliente (auto-init)
+├── .dockerignore
 └── docker-compose.yaml
 ```
 
@@ -47,14 +48,28 @@ docker compose up -d --build
 - Aplicación: <http://localhost:8080>
 - MySQL: `localhost:3306` · base `bdalumno` · usuario `root` · contraseña `root`
 
-El `web` se construye al vuelo con `php:8.4-apache` + `mysqli`; no hay Dockerfile
-aparte ni nada que instalar en el host. La base se crea con `MYSQL_DATABASE`, pero
-**la tabla se crea ejecutando el script** (al menos una vez por volumen nuevo; el
-script es idempotente):
+Ambos servicios se construyen al vuelo con `dockerfile_inline`: `web` usa
+`php:8.4-apache` + `mysqli`, y `db` deriva de `mysql:8.4.13` copiando
+`sql/tcliente.sql` a `/docker-entrypoint-initdb.d/`. En un **volumen nuevo**, la base
+y la tabla se crean solas al levantar; no hay Dockerfile aparte ni nada que instalar
+en el host.
+
+En un volumen ya inicializado el script **no** se vuelve a ejecutar. Para aplicarlo
+a mano sobre una base existente:
 
 ```bash
+# bash / zsh / Git Bash / WSL
 docker compose exec -T -e MYSQL_PWD=root db mysql -uroot < sql/tcliente.sql
 ```
+
+```powershell
+# PowerShell (el '<' no existe ahí)
+Get-Content -Raw .\sql\tcliente.sql | docker compose exec -T -e MYSQL_PWD=root db mysql -uroot
+```
+
+Si cambiás `sql/tcliente.sql`, reconstruí (`docker compose build db`) y usá un
+volumen nuevo para que se aplique; `docker compose down -v` reinicializa pero
+**borra la base**.
 
 Los datos persisten en el volumen `dbdata`:
 

@@ -14,7 +14,11 @@ services:
         condition: service_healthy
 
   db:
-    image: mysql:8.4.13
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM mysql:8.4.13
+        COPY sql/tcliente.sql /docker-entrypoint-initdb.d/01-tcliente.sql
     ports:
       - "3306:3306"
     environment:
