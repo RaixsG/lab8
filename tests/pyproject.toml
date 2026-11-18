@@ -1,0 +1,10 @@
+[project]
+name = "tests"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.10"
+dependencies = [
+    "pytest>=9.2.0",
+    "pytest-html>=4.2.0",
+    "selenium>=4.53.0",
+]

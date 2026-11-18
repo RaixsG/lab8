@@ -23,6 +23,13 @@ Aplicación web con arquitectura por capas (vista, controlador, modelo) para el
 │   └── frmModificarCliente.php
 ├── sql/
 │   └── tcliente.sql                 # crea bdalumno + tabla tcliente (auto-init)
+├── tests/
+│   ├── pyproject.toml               # dependencias Python (selenium, pytest, pytest-html)
+│   ├── uv.lock                      # versiones bloqueadas para reproducir en otra PC
+│   ├── conftest.py                  # driver Selenium + hook de capturas y reporte HTML
+│   ├── test_clientes_e2e.py         # suite E2E CRUD + validaciones (CP_CLI_01..09)
+│   ├── casos_prueba_clientes.xlsx   # matriz en formato Excel (Blackboard)
+│   └── casos_prueba_clientes.csv    # matriz CSV compatible con Excel en español
 ├── .dockerignore
 └── docker-compose.yaml
 ```
@@ -96,3 +103,73 @@ docker compose down -v    # borra la base y el volumen (irreversible)
    `mysqli_set_charset($cn, "utf8mb4");`.
 5. Abrir `http://localhost/lab/` (ajustar al nombre de la carpeta). La aplicación
    usa rutas relativas, así que funciona en subdirectorio.
+
+## Pruebas automatizadas con Selenium (`tests/`)
+
+La carpeta `tests/` contiene un entorno Python aislado con **`uv`**, **Selenium 4**,
+**`pytest`** y **`pytest-html`**. No necesitas copiar `tests/.venv/` ni
+`tests/reports/` al mover el proyecto a otra máquina: con `pyproject.toml` y
+`uv.lock` se reconstruye todo de forma idéntica.
+
+### Requisitos en la otra máquina
+- Aplicación web y MySQL corriendo (Opción A con Docker o Opción B con Laragon/XAMPP).
+- **`uv`** instalado (no necesitas instalar Python ni ChromeDriver a mano; `uv`
+  gestiona Python/dependencias y **Selenium Manager** descarga Chrome for Testing
+  automáticamente si no detecta Google Chrome).
+- Conexión a internet solo en la **primera** ejecución para descargar las ruedas
+  Python y el binario de navegador/driver en caché.
+
+### Paso a paso para ejecutar las pruebas en otra máquina
+
+1. **Instalar `uv`** (solo si aún no está instalado):
+
+   ```bash
+   # macOS / Linux
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
+
+   ```powershell
+   # Windows (PowerShell)
+   powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+   ```
+
+2. **Asegurar que la aplicación esté corriendo**:
+   - Con Docker: `http://localhost:8080`
+   - Con Laragon/XAMPP: por ejemplo `http://localhost/lab`
+
+3. **Instalar el entorno exacto dentro de `tests/`** (crea `tests/.venv/` usando `uv.lock`):
+
+   ```bash
+   cd tests
+   uv sync
+   ```
+
+4. **Ejecutar la suite de pruebas**:
+
+   - **Con Docker (`http://localhost:8080`) generando reporte HTML y capturas**:
+
+     ```bash
+     uv run pytest -v --html=reports/reporte_final.html --self-contained-html
+     ```
+
+   - **Viendo el navegador en pantalla (`--headed`)**:
+
+     ```bash
+     uv run pytest --headed -v
+     ```
+
+   - **Con Laragon/XAMPP (cambiando `--base-url`)**:
+
+     ```bash
+     uv run pytest --base-url=http://localhost/lab -v --html=reports/reporte_final.html --self-contained-html
+     ```
+
+5. **Revisar evidencias generadas**:
+   - **Reporte HTML autocontenido**: `tests/reports/reporte_final.html` (generado por `pytest-html`).
+   - **Capturas de pantalla**: `tests/reports/screenshots/` (tomadas por Selenium con `save_screenshot` e incrustadas en el HTML mediante `tests/conftest.py`).
+   - **Matriz de casos de prueba**: `tests/casos_prueba_clientes.xlsx` (lista para abrir en Excel o copiar en Word).
+
+### Cómo agregar nuevos tests
+1. Añadir una función `def test_... (driver: WebDriver, base_url: str) -> None:` en `tests/test_clientes_e2e.py`.
+2. Usar `wait_for(driver)` para esperas explícitas y limpiar cualquier dato sintético creado dentro de un bloque `finally:` para no alterar registros reales.
+3. Registrar el nuevo caso en `tests/casos_prueba_clientes.xlsx` y volver a ejecutar `uv run pytest`.

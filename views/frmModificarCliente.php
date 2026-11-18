@@ -50,27 +50,27 @@ if (isset($_GET['idc'])) {
                     </div>
                     <div class="field">
                         <label for="dni">DNI</label>
-                        <input type="text" id="dni" name="dni" maxlength="8" inputmode="numeric" value="<?= htmlspecialchars((string) $row['dni'], ENT_QUOTES, "UTF-8") ?>">
+                        <input type="text" id="dni" name="dni" maxlength="8" pattern="\d{8}" title="Ingresa 8 dígitos" inputmode="numeric" value="<?= htmlspecialchars((string) $row['dni'], ENT_QUOTES, "UTF-8") ?>" required>
                     </div>
                     <div class="field">
                         <label for="apellidos">Apellidos</label>
-                        <input type="text" id="apellidos" name="apellidos" maxlength="50" value="<?= htmlspecialchars((string) $row['apellidos'], ENT_QUOTES, "UTF-8") ?>">
+                        <input type="text" id="apellidos" name="apellidos" maxlength="50" value="<?= htmlspecialchars((string) $row['apellidos'], ENT_QUOTES, "UTF-8") ?>" required>
                     </div>
                     <div class="field">
                         <label for="nombres">Nombres</label>
-                        <input type="text" id="nombres" name="nombres" maxlength="50" value="<?= htmlspecialchars((string) $row['nombres'], ENT_QUOTES, "UTF-8") ?>">
+                        <input type="text" id="nombres" name="nombres" maxlength="50" value="<?= htmlspecialchars((string) $row['nombres'], ENT_QUOTES, "UTF-8") ?>" required>
                     </div>
                     <div class="field full">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" maxlength="50" value="<?= htmlspecialchars((string) $row['email'], ENT_QUOTES, "UTF-8") ?>">
+                        <input type="email" id="email" name="email" maxlength="50" value="<?= htmlspecialchars((string) $row['email'], ENT_QUOTES, "UTF-8") ?>" required>
                     </div>
                     <div class="field">
                         <label for="celular">Celular</label>
-                        <input type="tel" id="celular" name="celular" maxlength="9" inputmode="numeric" value="<?= htmlspecialchars((string) $row['celular'], ENT_QUOTES, "UTF-8") ?>">
+                        <input type="tel" id="celular" name="celular" maxlength="9" pattern="\d{9}" title="Ingresa 9 dígitos" inputmode="numeric" value="<?= htmlspecialchars((string) $row['celular'], ENT_QUOTES, "UTF-8") ?>" required>
                     </div>
                     <div class="field">
                         <label for="direccion">Dirección</label>
-                        <input type="text" id="direccion" name="direccion" maxlength="50" value="<?= htmlspecialchars((string) $row['direccion'], ENT_QUOTES, "UTF-8") ?>">
+                        <input type="text" id="direccion" name="direccion" maxlength="50" value="<?= htmlspecialchars((string) $row['direccion'], ENT_QUOTES, "UTF-8") ?>" required>
                     </div>
                 </div>
                 <div class="form-actions">

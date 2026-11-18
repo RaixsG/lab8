@@ -17,3 +17,9 @@ Desktop.ini
 
 # Logs
 *.log
+
+# Python / uv / pytest
+tests/.venv/
+tests/__pycache__/
+tests/.pytest_cache/
+tests/reports/

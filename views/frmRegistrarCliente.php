@@ -23,27 +23,27 @@
                 <div class="form-grid">
                     <div class="field">
                         <label for="dni">DNI</label>
-                        <input type="text" id="dni" name="dni" maxlength="8" inputmode="numeric" placeholder="12345678">
+                        <input type="text" id="dni" name="dni" maxlength="8" pattern="\d{8}" title="Ingresa 8 dígitos" inputmode="numeric" placeholder="12345678" required>
                     </div>
                     <div class="field">
                         <label for="celular">Celular</label>
-                        <input type="tel" id="celular" name="celular" maxlength="9" inputmode="numeric" placeholder="987654321">
+                        <input type="tel" id="celular" name="celular" maxlength="9" pattern="\d{9}" title="Ingresa 9 dígitos" inputmode="numeric" placeholder="987654321" required>
                     </div>
                     <div class="field">
                         <label for="apellidos">Apellidos</label>
-                        <input type="text" id="apellidos" name="apellidos" maxlength="50" placeholder="Pérez García">
+                        <input type="text" id="apellidos" name="apellidos" maxlength="50" placeholder="Pérez García" required>
                     </div>
                     <div class="field">
                         <label for="nombres">Nombres</label>
-                        <input type="text" id="nombres" name="nombres" maxlength="50" placeholder="Juan Carlos">
+                        <input type="text" id="nombres" name="nombres" maxlength="50" placeholder="Juan Carlos" required>
                     </div>
                     <div class="field full">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" maxlength="50" placeholder="juan@correo.com">
+                        <input type="email" id="email" name="email" maxlength="50" placeholder="juan@correo.com" required>
                     </div>
                     <div class="field full">
                         <label for="direccion">Dirección</label>
-                        <input type="text" id="direccion" name="direccion" maxlength="50" placeholder="Av. Siempre Viva 123">
+                        <input type="text" id="direccion" name="direccion" maxlength="50" placeholder="Av. Siempre Viva 123" required>
                     </div>
                 </div>
                 <div class="form-actions">
